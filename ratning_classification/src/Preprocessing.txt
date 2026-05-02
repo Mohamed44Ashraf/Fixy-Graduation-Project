@@ -1,0 +1,29 @@
+service_type           
+day_of_week
+time_of_day
+weather_condition
+job_duration_minutes
+response_time_minutes        
+punctuality_rating
+professionalism_rating
+communication_rating 
+handling_quality
+cost_satisfaction    
+customer_behavior
+clarity_of_issue
+safety_and_environment
+customer_punctuality  
+
+
+################################################################
+preprocessing
+==> Encoding 
+pd.get_dummies(df, columns=['service_type', 'day_of_week', 'weather_condition' ,'time_of_day' ])
+
+
+==> Encoding 
+final_rating  label encoding           
+
+
+==> Scaling 
+on all data

@@ -1,0 +1,16 @@
+service_type 
+job_duration_minutes
+response_time_minutes 
+punctuality_rating 
+professionalism_rating 
+communication_rating 
+problem_solving_rating 
+cleanliness_rating customer_
+satisfaction_score 
+day_of_week 
+time_of_day 
+location_type 
+city_region 
+weather_condition 
+cost_satisfaction 
+final_rating

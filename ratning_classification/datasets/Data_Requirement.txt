@@ -1,0 +1,83 @@
+service_type = [
+    "plumbing",               # سباكة
+    "electrical",             # كهرباء
+    "ac_repair",              # تكييف
+    "carpentry",              # نجارة
+    "cleaning",               # تنظيف
+    "appliance_repair",       # صيانة أجهزة
+    "painting",               # دهانات
+    "furniture_assembly",     # تركيب أثاث
+    "pest_control",           # مكافحة حشرات
+    "locksmith",              # أقفال ومفاتيح
+    "satellite_installation", # تركيب دش وتلفزيون
+    "it_support",             # دعم تقني منزلي
+    "roof_leak_repair",       # تسريب سقف
+    "furniture_moving",       # نقل أثاث
+    "delivery"                # توصيل (طرود/متعلقات بسيطة)
+]
+
+job_duration_minutes:
+min = 15
+max = 480
+weighted distribution based on service_type
+with noise + outliers + missing values
+
+
+response_time_minutes:
+min = 5
+max = 360
+weighted realistic distribution
+with noise + outliers + missing values
+
+
+
+punctuality_rating
+professionalism_rating
+communication_rating
+cleanliness_rating
+customer_satisfaction_score
+cost_satisfaction
+customer_behavior_rating
+clarity_of_issue
+safety_and_environment
+customer_punctuality
+كلهم:
+
+integers فقط
+
+من 1 إلى 5
+
+وفيها نسبة بسيطة جدًا من:
+
+قيمة شاذة (0، 6، 10)
+
+missing values
+
+"N/A"
+أخطاء بشرية بسيطة
+
+
+
+9) day_of_week
+
+Mon–Sun 
+10) time_of_day
+
+فئات؟
+
+morning
+
+afternoon
+
+evening
+
+night
+
+
+11) weather_condition
+
+مشمس – ممطر – غائم – شديد الحرارة…؟
+
+
+
+انا عاوزهم  زى كده فعلا بحيث استفاد  منهم ان لوعامل قبل الطلب فى وقت صعب او يوم  اجازه او طقس مش لطيفيكون  له طبعا تقييم عالى لانه موجود  فى اصعب الظروف 
