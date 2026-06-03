@@ -1,0 +1,115 @@
+DECLARE @CustomerId UNIQUEIDENTIFIER = 'PUT_CUSTOMER_ID_HERE';
+DECLARE @TechnicianId UNIQUEIDENTIFIER = 'PUT_TECHNICIAN_ID_HERE';
+DECLARE @ServiceBookingId UNIQUEIDENTIFIER = 'PUT_BOOKING_ID_HERE';
+
+DECLARE @GlobalMean FLOAT = 3;
+
+------------------------------------------------------------
+-- UserAvgRating
+------------------------------------------------------------
+SELECT 
+    CASE 
+        WHEN AVG(CAST(sb.PredictedTechnicianRating AS FLOAT)) IS NULL 
+             OR AVG(CAST(sb.PredictedTechnicianRating AS FLOAT)) = 0
+        THEN @GlobalMean
+        ELSE AVG(CAST(sb.PredictedTechnicianRating AS FLOAT))
+    END AS UserAvgRating
+FROM ServiceBookings sb
+INNER JOIN ServiceRequests sr ON sr.Id = sb.ServiceRequestId
+WHERE sr.CustomerId = @CustomerId
+  AND sb.IsEvaluated = 1
+  AND sb.PredictedTechnicianRating IS NOT NULL
+  AND sb.PredictedTechnicianRating <> 0;
+
+------------------------------------------------------------
+-- WorkerAvgRating
+------------------------------------------------------------
+SELECT 
+    CASE 
+        WHEN AVG(CAST(sb.PredictedTechnicianRating AS FLOAT)) IS NULL 
+             OR AVG(CAST(sb.PredictedTechnicianRating AS FLOAT)) = 0
+        THEN @GlobalMean
+        ELSE AVG(CAST(sb.PredictedTechnicianRating AS FLOAT))
+    END AS WorkerAvgRating
+FROM ServiceBookings sb
+WHERE sb.TechnicianId = @TechnicianId
+  AND sb.IsEvaluated = 1
+  AND sb.PredictedTechnicianRating IS NOT NULL
+  AND sb.PredictedTechnicianRating <> 0;
+
+------------------------------------------------------------
+-- UserRatingStd
+------------------------------------------------------------
+SELECT 
+    CASE 
+        WHEN COUNT(*) < 2 THEN 0
+        ELSE STDEV(CAST(sb.PredictedTechnicianRating AS FLOAT))
+    END AS UserRatingStd
+FROM ServiceBookings sb
+INNER JOIN ServiceRequests sr ON sr.Id = sb.ServiceRequestId
+WHERE sr.CustomerId = @CustomerId
+  AND sb.IsEvaluated = 1
+  AND sb.PredictedTechnicianRating IS NOT NULL
+  AND sb.PredictedTechnicianRating <> 0;
+
+------------------------------------------------------------
+-- UserWorkerAvg
+------------------------------------------------------------
+SELECT 
+    CASE 
+        WHEN AVG(CAST(sb.PredictedTechnicianRating AS FLOAT)) IS NULL 
+             OR AVG(CAST(sb.PredictedTechnicianRating AS FLOAT)) = 0
+        THEN @GlobalMean
+        ELSE AVG(CAST(sb.PredictedTechnicianRating AS FLOAT))
+    END AS UserWorkerAvg
+FROM ServiceBookings sb
+INNER JOIN ServiceRequests sr ON sr.Id = sb.ServiceRequestId
+WHERE sr.CustomerId = @CustomerId
+  AND sb.TechnicianId = @TechnicianId
+  AND sb.IsEvaluated = 1
+  AND sb.PredictedTechnicianRating IS NOT NULL
+  AND sb.PredictedTechnicianRating <> 0;
+
+------------------------------------------------------------
+-- FeedbackCount
+------------------------------------------------------------
+SELECT 
+    CASE 
+        WHEN COUNT(*) = 0 THEN 1
+        ELSE COUNT(*)
+    END AS FeedbackCount
+FROM ServiceBookings sb
+INNER JOIN ServiceRequests sr ON sr.Id = sb.ServiceRequestId
+WHERE sr.CustomerId = @CustomerId
+  AND sb.IsEvaluated = 1
+  AND sb.PredictedTechnicianRating IS NOT NULL;
+
+------------------------------------------------------------
+-- WorkerRatingVar
+------------------------------------------------------------
+SELECT 
+    CASE 
+        WHEN COUNT(*) < 2 THEN 0
+        ELSE VAR(CAST(sb.PredictedTechnicianRating AS FLOAT))
+    END AS WorkerRatingVar
+FROM ServiceBookings sb
+WHERE sb.TechnicianId = @TechnicianId
+  AND sb.IsEvaluated = 1
+  AND sb.PredictedTechnicianRating IS NOT NULL
+  AND sb.PredictedTechnicianRating <> 0;
+
+------------------------------------------------------------
+-- predictedRating
+------------------------------------------------------------
+SELECT 
+    sb.PredictedTechnicianRating AS predictedRating
+FROM ServiceBookings sb
+WHERE sb.Id = @ServiceBookingId;
+
+------------------------------------------------------------
+-- RatingDeviation
+------------------------------------------------------------
+SELECT 
+    sb.PredictedTechnicianRating - @GlobalMean AS RatingDeviation
+FROM ServiceBookings sb
+WHERE sb.Id = @ServiceBookingId;
